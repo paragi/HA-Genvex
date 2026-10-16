@@ -62,7 +62,7 @@ homeassistant:
 
 ## Notes
 
-* HA controle fan setting 2. Fan speed setting 1,3 and 4 remain manual settings controled by the optima panel.
+* HA controle fan setting 2. Fan speed setting 1,3 and 4 remain manual settings controled by the optima panel. Fan speed 1 being the default fall back setting, if HA should fails for some reason.
 
 ---
 
