@@ -62,6 +62,11 @@ homeassistant:
 4. Paste the code from `genvex_panel1.yaml` and `genvex_panel2.yaml` (or combine them as preferred) to set up your cards.
 
 ![Genvex Panel](genvex_panel.png)
+
+## Notes
+
+* HA controle fan setting 2. 1,3 and 4 remain manual settings controled by th optima panel.
+
 ---
 
 ## 🧪 Tested Hardware & Compatibility
