@@ -68,7 +68,3 @@ Contributions, feedback, and further developments are very welcome! If you make 
 ## 📄 License
 
 Distributed under the MIT License. Feel free to use and modify the code as needed.
-
-```
-
-```
