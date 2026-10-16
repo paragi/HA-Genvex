@@ -2,7 +2,10 @@
 
 This repository contains a complete integratiio of **Genvex Eco 375** ventilation unit into Home Assistant via Modbus, including a structured package setup, control panels, and status overviews.
 
-![Optima 251](optima-251.jpg) ![Genvex eco 375](genvex-eco-375)
+<p float="left">
+  <img src="optima-251.jpg" alt="Optima 251" width="49%" />
+  <img src="genvex-eco-375.jpg" alt="Genvex Eco 375" width="49%" />
+</p>
 
 ## Files in this Repository
 * **`genvex_modbus.yaml`**: The Modbus package that creates all sensors, entities, and controls in Home Assistant.
