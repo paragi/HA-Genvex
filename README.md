@@ -17,13 +17,10 @@ This repository contains a complete integration of **Genvex Eco 375** ventilatio
 ## 📂 Folder Structure
 To keep your Home Assistant configuration clean and organized, place the files using the following structure:
 
-```text
 config/
 ├── configuration.yaml
 └── packages/
     └── genvex_modbus.yaml
-
-```
 
 ---
 
