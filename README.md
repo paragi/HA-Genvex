@@ -1,4 +1,3 @@
-```markdown
 # Genvex Eco 375 Modbus Integration for Home Assistant
 
 This repository contains a complete solution for integrating a **Genvex Eco 375** ventilation unit into Home Assistant via Modbus, including a structured package setup, control panels, and status overviews.
