@@ -1,0 +1,19 @@
+# Home Assistant specific
+secrets.yaml
+automations.yaml
+scripts.yaml
+scenes.yaml
+
+# OS and IDE generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*.*~

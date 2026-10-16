@@ -1,0 +1,382 @@
+type: vertical-stack
+cards:
+  - type: custom:mushroom-title-card
+    title: Operationel state
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        primary: Alarm Status
+        secondary: >-
+          {{ states('sensor.genvex_alarm_status') }}  (Code: {{
+          states('sensor.genvex_alarm') }})
+        icon: mdi:alert-octagon
+        icon_color: "{{ 'red' if states('sensor.genvex_alarm') | int(0) > 0 else 'green' }}"
+        entity: sensor.genvex_alarm_status
+        layout: horizontal
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_operating_mode
+        primary: Operating Mode
+        secondary: "{{ states(entity) }} "
+        icon: mdi:cog-sync
+        icon_color: "{{ 'red' if is_state(entity, 'Stopped') else 'green' }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t1
+        primary: Intake Temp (T1)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:cloud-download-outline
+        icon_color: blue
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t5
+        primary: Before heat pump (T5)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:heat-pump
+        icon_color: blue
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t7
+        primary: Supply temp (T7)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:import
+        icon_color: blue
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t6
+        primary: After heat pump (T6)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:heat-pump
+        icon_color: orange
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t4
+        primary: Exhaust Temp (T4)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:cloud-upload
+        icon_color: orange
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t8
+        primary: Water Reheating Coil (T8)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:heating-coil
+        icon_color: red
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t3
+        primary: Extract Temp (T3)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:export
+        icon_color: orange
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t9
+        primary: Outdoor Temp (T9)
+        secondary: "{{ states(entity) }} °C"
+        icon: mdi:home-thermometer-outline
+        icon_color: green
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_t2
+        primary: Room (panel)Temp (T2)
+        secondary: "{{ states(entity) }} °C\""
+        icon: mdi:thermometer-lines
+        icon_color: orange
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_measured_humidity
+        primary: Humidity (Extract)
+        secondary: "{{ states(entity) }} % "
+        icon: mdi:water-percent
+        icon_color: blue
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_humidity_calc_setpoint
+        primary: Outdoor Dew Point
+        secondary: "{{ states(entity) }} % RH"
+        icon: mdi:water-thermometer
+        icon_color: blue
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_inlet_fan_pct
+        primary: Inlet Fan
+        secondary: >-
+          {{ states(entity) }} % ({{ states('sensor.genvex_inlet_fan_rpm') }}
+          RPM)
+        icon: mdi:fan-plus
+        icon_color: blue
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_extract_fan_pct
+        primary: Extract Fan
+        secondary: >-
+          {{ states(entity) }} % ({{ states('sensor.genvex_extract_fan_rpm') }}
+          RPM)
+        icon: mdi:fan-minus
+        icon_color: orange
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_bypass_pct
+        primary: Bypass Damper
+        secondary: "{{ states(entity) }} %"
+        icon: |-
+          {% set pct = states(entity) | float(0) %} {% if pct == 0 %}
+            mdi:valve-closed
+          {% elif pct > 0 and pct < 100 %}
+            mdi:valve
+          {% else %}
+            mdi:valve-open
+          {% endif %}
+        icon_color: |-
+          {% set pct = states(entity) | float(0) %} {% if pct == 0 %}
+            red
+          {% elif pct <= 50 %}
+            orange
+          {% else %}
+            green
+          {% endif %}
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_bypass_on_off
+        primary: Bypass Status
+        secondary: "{{ 'On' if is_state(entity, '1') else 'Off' }} ({{ states(entity) }})"
+        icon: >-
+          {{ 'mdi:valve-open' if is_state(entity, '1') else 'mdi:valve-closed'
+          }}
+        icon_color: "{{ 'green' if is_state(entity, '1') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_watervalve_pct
+        primary: Water Valve - after heater
+        secondary: "{{ states(entity) }} %"
+        icon: mdi:pipe-valve
+        icon_color: red
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_humidity_fan_control
+        primary: Humidity Fan Boost (± 100%)
+        secondary: "{{ states(entity) }} %"
+        icon: mdi:fan-chevron-up
+        icon_color: blue
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_hygrostat
+        primary: Hygrostat Input
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:water-boiler' if is_state(entity, 'on') else
+          'mdi:water-boiler-off' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_start_stop
+        primary: Start/Stop Input
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: "{{ 'mdi:power-cycle' if is_state(entity, 'on') else 'mdi:power-off' }}"
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+  - type: custom:mushroom-title-card
+    title: External control relays
+  - type: grid
+    columns: 3
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_1
+        primary: Relay 1
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_2
+        primary: Relay 2
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_3
+        primary: Relay 3
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_4
+        primary: Relay 4
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_5
+        primary: Relay 5
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_6
+        primary: Relay 6
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_7
+        primary: Relay 7
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_8
+        primary: Relay 8
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_9
+        primary: Relay 9
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_10
+        primary: Relay 10
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_relay_11
+        primary: Relay 11
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:electric-switch-closed' if is_state(entity, 'on') else
+          'mdi:electric-switch' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+  - type: custom:mushroom-title-card
+    title: Digital Inputs & Outputs
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_in_1
+        primary: Digital In 1
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-left-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-left-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_out_1
+        primary: Digital Out 1
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-right-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-right-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_in_2
+        primary: Digital In 2
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-left-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-left-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_out_2
+        primary: Digital Out 2
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-right-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-right-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_in_3
+        primary: Digital In 3
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-left-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-left-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_out_3
+        primary: Digital Out 3
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-right-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-right-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_in_4
+        primary: Digital In 4
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-left-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-left-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.genvex_digital_out_4
+        primary: Digital Out 4
+        secondary: "{{ 'On' if is_state(entity, 'on') else 'Off' }}"
+        icon: >-
+          {{ 'mdi:arrow-right-bold-circle' if is_state(entity, 'on') else
+          'mdi:arrow-right-bold-circle-outline' }}
+        icon_color: "{{ 'green' if is_state(entity, 'on') else 'red' }}"
+  - type: custom:mushroom-title-card
+    title: Software info
+  - type: custom:mushroom-template-card
+    primary: Genvex Controller
+    secondary: >-
+      ver. {{ states('sensor.genvex_ver_controller') }}{{
+      states('sensor.genvex_subver_controller') }}
+    icon: mdi:cpu-64-bit
+    icon_color: green
+  - type: custom:mushroom-template-card
+    primary: Display Unit
+    secondary: >-
+      ver. {{ states('sensor.genvex_ver_display') }}{{
+      states('sensor.genvex_subver_display') }}
+    icon: mdi:monitor-dashboard
+    icon_color: green
+  - type: custom:mushroom-template-card
+    primary: Modbus Protocol
+    secondary: >-
+      ver. {{ states('sensor.genvex_ver_modbus') }}{{
+      states('sensor.genvex_subver_modbus') }}
+    icon: mdi:lan-connect
+    icon_color: green
+  - type: custom:stack-in-card
+    cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_modbus_mode
+        primary: Modbus Mode
+        secondary: >
+          {% set mapper = { '0': 'OFF', '1': '9600', '2': '19200' } %} {% set
+          state = states(entity) | int | string %} Value: {{ mapper[state] if
+          state in mapper else 'Unknown' }} ({{ states(entity) }})
+        icon: mdi:serial-port
+        icon_color: green
+        tap_action:
+          action: none
+  - type: custom:stack-in-card
+    cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.genvex_modbus_address
+        primary: Modbus Address (1-247)
+        secondary: |
+          ID: {{ states(entity) | int }}
+        icon: mdi:identifier
+        icon_color: green
+        tap_action:
+          action: none

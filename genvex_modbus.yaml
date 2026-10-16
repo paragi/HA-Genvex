@@ -1,0 +1,1235 @@
+modbus:
+  - name: "genvex"
+    type: serial
+    port: /dev/ttyUSB0
+    baudrate: 19200
+    bytesize: 8
+    method: rtu
+    parity: E
+    stopbits: 1
+    timeout: 3          # Sænket fra 5 til 3 (lavere ventetid ved timeouts)
+    delay: 5            # Øget fra 2 til 5 ms mellem kommandoer (vigtigt for ældre Genvex print)
+    message_wait_milliseconds: 50 # Giver bussen ro mellem læsninger
+    lazy_error_count: 5 # Forhindrer bussen i at crashe med det samme ved en enkelt læsefejl
+
+    # ==========================================
+    # MODBUS: BINARY SENSORS (0x & 1x Registers)
+    # ==========================================
+    binary_sensors:
+      # --- 0x Registers (Raw Hardware Relays & Digital Outputs) ---
+      - name: "genvex_relay_1"
+        address: 0
+        input_type: coil
+      - name: "genvex_relay_2"
+        address: 1
+        input_type: coil
+      - name: "genvex_relay_3"
+        address: 2
+        input_type: coil
+      - name: "genvex_relay_4"
+        address: 3
+        input_type: coil
+      - name: "genvex_relay_5"
+        address: 4
+        input_type: coil
+      - name: "genvex_relay_6"
+        address: 5
+        input_type: coil
+      - name: "genvex_relay_7"
+        address: 6
+        input_type: coil
+      - name: "genvex_relay_8"
+        address: 7
+        input_type: coil
+      - name: "genvex_relay_9"
+        address: 8
+        input_type: coil
+      - name: "genvex_relay_10"
+        address: 9
+        input_type: coil
+      - name: "genvex_relay_11"
+        address: 10
+        input_type: coil
+      - name: "genvex_digital_out_1"
+        address: 11
+        input_type: coil
+      - name: "genvex_digital_out_2"
+        address: 12
+        input_type: coil
+      - name: "genvex_digital_out_3"
+        address: 13
+        input_type: coil
+      - name: "genvex_digital_out_4"
+        address: 14
+        input_type: coil
+
+      # --- 1x Registers (Digital Inputs) ---
+      - name: "genvex_hygrostat"
+        address: 0
+        input_type: discrete_input
+      - name: "genvex_start_stop"
+        address: 1
+        input_type: discrete_input
+      - name: "genvex_digital_in_1"
+        address: 2
+        input_type: discrete_input
+      - name: "genvex_digital_in_2"
+        address: 3
+        input_type: discrete_input
+      - name: "genvex_digital_in_3"
+        address: 4
+        input_type: discrete_input
+      - name: "genvex_digital_in_4"
+        address: 5
+        input_type: discrete_input
+
+    # ==========================================
+    # MODBUS: SENSORS (3x & 4x Read-Only Backing)
+    # ==========================================
+    sensors:
+      # --- 3x Registers (Temperatures & Actual Performance) ---
+      - name: "genvex_t1"
+        unique_id: genvex_t1
+        address: 0
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t2"
+        unique_id: genvex_t2
+        address: 1
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t3"
+        unique_id: genvex_t3
+        address: 2
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t4"
+        unique_id: genvex_t4
+        address: 3
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t5"
+        unique_id: genvex_t5
+        address: 4
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t6"
+        unique_id: genvex_t6
+        address: 5
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t7"
+        unique_id: genvex_t7
+        address: 6
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t8"
+        unique_id: genvex_t8
+        address: 7
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t9"
+        unique_id: genvex_t9
+        address: 8
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_t2_panel"
+        unique_id: genvex_t2_panel
+        address: 9
+        input_type: input
+        scale: 0.1
+        offset: -30
+        unit_of_measurement: "°C"
+      - name: "genvex_measured_humidity"
+        unique_id: genvex_measured_humidity
+        address: 10
+        input_type: input
+        unit_of_measurement: "%"
+      - name: "genvex_humidity_calc_setpoint"
+        unique_id: genvex_humidity_calc_setpoint
+        address: 11
+        input_type: input
+        unit_of_measurement: "%"
+      - name: "genvex_alarm"
+        unique_id: genvex_alarm
+        address: 101
+        input_type: input
+      - name: "genvex_inlet_fan_pct"
+        unique_id: genvex_inlet_fan_pct
+        address: 102
+        input_type: input
+        unit_of_measurement: "%"
+      - name: "genvex_extract_fan_pct"
+        unique_id: genvex_extract_fan_pct
+        address: 103
+        input_type: input
+        unit_of_measurement: "%"
+      - name: "genvex_bypass_pct"
+        unique_id: genvex_bypass_pct
+        address: 104
+        input_type: input
+        unit_of_measurement: "%"
+        slave_count: 1
+        data_type: int16
+        scale: 1
+        precision: 0
+      - name: "genvex_watervalve_pct"
+        unique_id: genvex_watervalve_pct
+        address: 105
+        input_type: input
+        unit_of_measurement: "%"
+      - name: "genvex_humidity_fan_control"
+        unique_id: genvex_humidity_fan_control
+        address: 106
+        input_type: input
+        scale: 1
+        offset: -10
+        unit_of_measurement: "%"
+      - name: "genvex_bypass_on_off"
+        unique_id: genvex_bypass_on_off
+        address: 107
+        input_type: input
+      - name: "genvex_inlet_fan_rpm"
+        unique_id: genvex_inlet_fan_rpm
+        address: 108
+        input_type: input
+        unit_of_measurement: "RPM"
+      - name: "genvex_extract_fan_rpm"
+        unique_id: genvex_extract_fan_rpm
+        address: 109
+        input_type: input
+        unit_of_measurement: "RPM"
+      # Hovedversioner (håndteres som tal med scale)
+      - name: "genvex_ver_controller"
+        unique_id: genvex_ver_controller
+        address: 200
+        input_type: input
+        scale: 0.1
+        precision: 1
+        data_type: uint16
+
+      - name: "genvex_ver_display"
+        unique_id: genvex_ver_display
+        address: 201
+        input_type: input
+        scale: 0.1
+        precision: 1
+        data_type: uint16
+
+    # Subversioner (tolkes direkte som ASCII-tekst)
+      - name: "genvex_subver_controller"
+        unique_id: genvex_subver_controller
+        address: 202
+        input_type: input
+        data_type: string
+        count: 1
+
+      - name: "genvex_subver_display"
+        unique_id: genvex_subver_display
+        address: 203
+        input_type: input
+        data_type: string
+        count: 1
+
+    # Modbus versioner
+      - name: "genvex_ver_modbus"
+        unique_id: genvex_ver_modbus
+        address: 204
+        input_type: input
+        scale: 0.1
+        precision: 1
+        data_type: uint16
+
+      - name: "genvex_subver_modbus"
+        unique_id: genvex_subver_modbus
+        address: 205
+        input_type: input
+        data_type: string
+        count: 1
+
+      # --- 4x Registers Base Sensors (For Template Reading) ---
+      - name: "genvex_setpoint_temp"
+        address: 0
+        input_type: holding
+        data_type: int16
+        scale: 0.1
+        offset: 10
+        precision: 1           # TILFØJET: Tvinger systemet til at bevare ét decimal (f.eks. 23.5)
+        unique_id: genvex_holding_addr_0_v2
+        unit_of_measurement: "°C"
+        scan_interval: 10
+      - name: "genvex_filter_change_months"
+        address: 4
+        input_type: holding
+        unit_of_measurement: "months"
+      - name: "genvex_level_1_supply_pct"
+        address: 6
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_level_2_supply_pct"
+        address: 7
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_level_3_supply_pct"
+        address: 8
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_level_1_extract_pct"
+        address: 9
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_level_2_extract_pct"
+        address: 10
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_level_3_extract_pct"
+        address: 11
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_t2_adjustment"
+        address: 12
+        input_type: holding
+        scale: 0.1
+        unit_of_measurement: "°C"
+      - name: "genvex_level_3_4_hour"
+        address: 13
+        input_type: holding
+        unit_of_measurement: "h"
+      - name: "genvex_regform"
+        address: 15
+        input_type: holding
+      - name: "genvex_preheat_temp_cfg"
+        address: 16
+        input_type: holding
+        data_type: int16
+        scale: 0.1
+        offset: -15            # Trækker 15 fra, så 0-150 rå værdi bliver til -15.0 til 0.0 °C
+        precision: 1
+        unit_of_measurement: "°C"
+      - name: "genvex_bypass_max_cfg"
+        address: 17
+        input_type: holding
+        scale: 0.1
+        unit_of_measurement: "°C"
+      - name: "genvex_water_reg_interval"
+        address: 18
+        input_type: holding
+        unit_of_measurement: "sec"
+      - name: "genvex_power_reg_interval"
+        address: 19
+        input_type: holding
+        unit_of_measurement: "min"
+      - name: "genvex_frost_reduction_cfg"
+        address: 20
+        input_type: holding
+        scale: 0.1
+        unit_of_measurement: "°C"
+      - name: "genvex_frost_default_cfg"
+        address: 22
+        input_type: holding
+        scale: 0.1
+        unit_of_measurement: "°C"
+      - name: "genvex_modbus_mode"
+        address: 26
+        input_type: holding
+      - name: "genvex_modbus_address"
+        address: 27
+        input_type: holding
+      - name: "genvex_humidity_max_temp"
+        address: 28
+        input_type: holding
+        unit_of_measurement: "°C"
+      - name: "genvex_humidity_max_value"
+        address: 29
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_humidity_fan_speed"
+        address: 30
+        input_type: holding
+        unit_of_measurement: "%"
+      - name: "genvex_humidity_regulation"
+        address: 31
+        input_type: holding
+      - name: "genvex_end_bypass_low_fresh_air"
+        address: 25
+        input_type: holding
+        scale: 0.1
+        unit_of_measurement: "°C"
+
+    ## ==========================================
+    # MODBUS: SWITCHES (Writable 4x Binary Coils)
+    # ==========================================
+    switches:
+      - name: "genvex_preheat_sw"
+        unique_id: genvex_preheat_sw
+        address: 1
+        slave: 1               # TILFØJET
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 1
+          input_type: holding
+
+      - name: "genvex_reheat_sw"
+        unique_id: genvex_reheat_sw
+        address: 2
+        slave: 1               # TILFØJET (Løser timeout på adresse 2)
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 2
+          input_type: holding
+
+      - name: "genvex_timer_level_3_4_sw"
+        unique_id: genvex_timer_level_3_4_sw
+        address: 3
+        slave: 1               # TILFØJET (Løser timeout på adresse 3)
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 3
+          input_type: holding
+
+      - name: "genvex_humidity_sw"
+        unique_id: genvex_humidity_sw
+        address: 5
+        slave: 1               # TILFØJET
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 5
+          input_type: holding
+
+      - name: "genvex_filter_autostop_sw"
+        unique_id: genvex_filter_autostop_sw
+        address: 14
+        slave: 1               # TILFØJET
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 14
+          input_type: holding
+
+      - name: "genvex_frost_sw"
+        unique_id: genvex_frost_sw
+        address: 21
+        slave: 1               # TILFØJET
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 21
+          input_type: holding
+
+      - name: "genvex_aux_relay_r9_sw"
+        unique_id: genvex_aux_relay_r9_sw
+        address: 23
+        slave: 1               # TILFØJET
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        verify:
+          address: 23
+          input_type: holding
+
+      - name: "genvex_stop_unit_sw"
+        unique_id: genvex_stop_unit_sw
+        address: 24
+        slave: 1               # Sørg for denne også står her rent
+        write_type: holding
+        command_on: 1
+        command_off: 0
+# ==========================================
+# 1. HELPERS (DASHBOARD SLIDERS)
+# ==========================================
+input_number:
+  genvex_fan_speed:
+    name: "Genvex fan speed"
+    min: 0
+    max: 100
+    step: 1
+    icon: mdi:fan
+    unit_of_measurement: "%"
+  genvex_fan_balance:
+    name: "Genvex fan balance"
+    min: 0
+    max: 100
+    step: 1
+    initial: 50
+    icon: mdi:scale-balance
+    unit_of_measurement: "%"
+  genvex_fan_speed_free_cooling:
+    name: "Genvex fan speed free cooling"
+    min: 0
+    max: 100
+    step: 1
+    icon: mdi:fan
+    unit_of_measurement: "%"
+  genvex_stop_free_cooling_temp:
+    name: "Genvex stop free cooling temp"
+    min: 15
+    max: 25
+    step: 1
+    icon: mdi:thermometer
+    unit_of_measurement: "°C"
+
+
+input_boolean:
+  genvex_free_cooling_enabled:
+    name: "Genvex free cooling"
+    icon: mdi:snowflake-thermometer
+
+
+# ==========================================
+# 2. AUTOMATION (ONE-WAY CONTROL ONLY)
+# ==========================================
+automation:
+  - alias: "Genvex: Speed and Balance Control"
+    id: genvex_speed_balance_control
+    description: "Calculates values using pure integers to prevent any rounding errors"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.genvex_fan_speed
+          - input_number.genvex_fan_balance
+    action:
+      - variables:
+          # Convert to integers immediately to eliminate float math entirely
+          speed: "{{ states('input_number.genvex_fan_speed') | int(0) }}"
+          balance: "{{ states('input_number.genvex_fan_balance') | int(50) }}"
+
+          # Pure integer math
+          supply_val: "{{ (speed + (balance - 50)) | clamp(0, 100) }}"
+          extract_val: "{{ (speed - (balance - 50)) | clamp(0, 100) }}"
+
+      # Write directly to Modbus registers
+      - action: modbus.write_register
+        data:
+          hub: genvex
+          address: 7
+          value: "{{ supply_val }}"
+      - action: modbus.write_register
+        data:
+          hub: genvex
+          address: 10
+          value: "{{ extract_val }}"
+
+      # Force update of sensor states immediately
+      - action: homeassistant.update_entity
+        target:
+          entity_id:
+            - sensor.genvex_level_2_supply_pct
+            - sensor.genvex_level_2_extract_pct
+    mode: restart
+
+  - alias: "Genvex: preset operation"
+    id: genvex_preset_operation
+    description: "Maximice cooling/heat revocery or standard operation by presetting operational parameters"
+    trigger:
+      - platform: state
+        entity_id: input_select.genvex_preset_operation
+      - platform: state
+        entity_id:
+          - sensor.genvex_t1
+          - sensor.genvex_t3
+          - input_number.recover_free_cooling_max_fan_speed
+      - platform: time_pattern
+        minutes: "/15"
+    action:
+      - choose:
+          # MODE 1: HEAT RECOVERY (Max heat retention from wood stove)
+          - conditions:
+              - condition: state
+                entity_id: input_select.genvex_preset_operation
+                state: "Heat Recovery"
+            sequence:
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_target_temperature
+                data:
+                  value: 30
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_num_bypass_max_temp
+                data:
+                  value: 10
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_num_end_bypass_fresh_air
+                data:
+                  value: 20
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_fan_speed
+                data:
+                  value: 40
+
+          # MODE 2: FREECOOLING (Max cooling execution via slider)
+          - conditions:
+              - condition: state
+                entity_id: input_select.genvex_preset_operation
+                state: "Freecooling"
+            sequence:
+              # Adjust setup for full night-cooling pass-through
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_target_temperature
+                data:
+                  value: 15
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_num_bypass_max_temp
+                data:
+                  value: 1
+              - action: number.set_value
+                target:
+                  entity_id: number.genvex_num_end_bypass_fresh_air
+                data:
+                  value: 0
+              # Fan speed logic based on temp comparison
+              - if:
+                  - condition: template
+                    value_template: "{{ states('sensor.genvex_t1') | float(30) < states('sensor.genvex_t3') | float(20) }}"
+                then:
+                  - action: number.set_value
+                    target:
+                      entity_id: number.genvex_fan_speed
+                    data:
+                      value: "{{ states('input_number.recover_free_cooling_max_fan_speed') | int(80) }}"
+                else:
+                  - action: number.set_value
+                    target:
+                      entity_id: number.genvex_fan_speed
+                    data:
+                      value: 20
+
+          # MODE 3: BALANCED (Standard temperature control automation)
+          - conditions:
+              - condition: state
+                entity_id: input_select.genvex_preset_operation
+                state: "Balanced"
+            sequence:
+              - if:
+                  - condition: template
+                    value_template: "{{ states('sensor.genvex_t1') | float(30) < states('sensor.genvex_t3') | float(20) }}"
+                then:
+                  - action: number.set_value
+                    target:
+                      entity_id: number.genvex_fan_speed
+                    data:
+                      value: 50
+                else:
+                  - action: number.set_value
+                    target:
+                      entity_id: number.genvex_fan_speed
+                    data:
+                      value: 30
+    mode: restart
+
+
+
+# ==========================================
+# TEMPLATES: GROUPED BY FUNCTION
+# ==========================================
+template:
+  # --- FUNCTION: SYSTEM STATUS & DIAGNOSTICS ---
+  - sensor:
+      - name: "Genvex Operating Mode"
+        unique_id: genvex_operating_mode
+        state: >
+          {% if is_state('switch.genvex_stop_unit_sw', 'on') %}
+            Stopped
+          {% else %}
+            Running
+          {% endif %}
+
+      - name: "Genvex Alarm Status"
+        unique_id: genvex_alarm_status
+        state: >-
+          {% set code = states('sensor.genvex_alarm') | int(0) %}
+          {% if code == 0 %}
+            All OK
+          {% else %}
+            {% set ns = namespace(alarms=[]) %}
+            {% if (code // 1) % 2 != 0 %}   {% set ns.alarms = ns.alarms + ["External stop"] %} {% endif %}
+            {% if (code // 2) % 2 != 0 %}   {% set ns.alarms = ns.alarms + ["Main Filter"] %} {% endif %}
+            {% if (code // 4) % 2 != 0 %}   {% set ns.alarms = ns.alarms + ["High Pressure"] %} {% endif %}
+            {% if (code // 8) % 2 != 0 %}   {% set ns.alarms = ns.alarms + ["Frost"] %} {% endif %}
+            {% if (code // 16) % 2 != 0 %}  {% set ns.alarms = ns.alarms + ["Comm Error Panel->Controller"] %} {% endif %}
+            {% if (code // 32) % 2 != 0 %}  {% set ns.alarms = ns.alarms + ["External Filter"] %} {% endif %}
+            {% if (code // 64) % 2 != 0 %}  {% set ns.alarms = ns.alarms + ["Fan Speed Error"] %} {% endif %}
+            {{ ns.alarms | join(', ') }}
+          {% endif %}
+
+      - name: "Genvex Modbus Baudrate Mode"
+        unique_id: genvex_diag_baudrate
+        state: >
+          {% set mode = states('sensor.genvex_modbus_mode') | int(-1) %}
+          {% if mode == 0 %} OFF
+          {% elif mode == 1 %} 9600 Baud
+          {% elif mode == 2 %} 19200 Baud
+          {% else %} Unknown
+          {% endif %}
+
+      # Calculates heat recovery efficiency based on temperatures and corrects for fan imbalance
+      - name: "Genvex Efficiency"
+        unique_id: genvex_efficiency
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:percent
+        state: >
+          {% set t_intake = states('sensor.genvex_t3') | float(0) %}
+          {% set t_exhaust = states('sensor.genvex_t4') | float(0) %}
+          {% set t_supply = states('sensor.genvex_t1') | float(0) %}
+          {% set t_extract = states('sensor.genvex_t7') | float(0) %}
+
+          {# Calculate fan balance ratio #}
+          {% set fan_in = states('sensor.genvex_level_2_supply_pct') | float(1) %}
+          {% set fan_out = states('sensor.genvex_level_2_extract_pct') | float(1) %}
+          {% set balance_ratio = fan_in / fan_out %}
+
+          {# Efficiency formula #}
+          {% set delta_t_actual = t_supply - t_intake %}
+          {% set delta_t_max = t_extract - t_intake %}
+
+          {# Only calculate if the difference is greater than 2 degrees (noise reduction) #}
+          {% if delta_t_max | abs > 2 %}
+            {% set efficiency = (delta_t_actual / delta_t_max) * 100 %}
+
+            {# Apply penalty only if imbalance exceeds 10% #}
+            {% set diff = (1 - balance_ratio) | abs %}
+            {% set penalty = (1 - (diff - 0.1) * 0.5) if diff > 0.1 else 1 %}
+
+            {{ (efficiency * penalty) | round(1) }}
+          {% else %}
+            0
+          {% endif %}
+        availability: >
+          {{ states('sensor.genvex_t1') | is_number and
+            states('sensor.genvex_t3') | is_number and
+            states('sensor.genvex_t4') | is_number and
+            states('sensor.genvex_t7') | is_number }}
+
+  - button:
+      - name: "Genvex Stop"
+        unique_id: genvex_stop
+        icon: mdi:fan-off
+        press:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                slave: 1
+                address: 7       # Level 2 Supply Pct
+                value: 0
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                slave: 1
+                address: 10      # Level 2 Extract Pct
+                value: 0
+            - delay: "00:00:01"
+            - action: homeassistant.update_entity
+              target:
+                entity_id:
+                  - number.genvex_num_level_2_supply
+                  - number.genvex_num_level_2_extract
+
+  - select:
+      - name: "Genvex Regulation Mode"
+        unique_id: genvex_regulation_mode
+        state: >
+          {% set form = states('sensor.genvex_regform') | int(-1) %}
+          {% if form == 0 %} Room (Panel T2)
+          {% elif form == 1 %} Supply Air
+          {% elif form == 2 %} Extract Air
+          {% else %} Unknown
+          {% endif %}
+        options: "{{ ['Room (Panel T2)', 'Supply Air', 'Extract Air'] }}"
+        select_option:
+          - action: modbus.write_register
+            data:
+              hub: genvex
+              address: 15
+              value: >-
+                {% if option == "Room (Panel T2)" %} 0
+                {% elif option == "Supply Air" %} 1
+                {% elif option == "Extract Air" %} 2
+                {% else %} 0
+                {% endif %}
+          - action: homeassistant.update_entity
+            target:
+              entity_id: sensor.genvex_regform
+
+      - name: "Genvex Preset Operation"
+        icon: mdi:air-conditioner
+        options:
+          - "Heat Recovery"
+          - "Freecooling"
+          - "Balanced"
+        state: "{{ states('select.genvex_preset_operation') if states('select.genvex_preset_operation') not in ['unknown', 'unavailable'] else 'Balanced' }}"
+        select_option:
+          - action: system_log.write
+            data:
+              message: "Genvex mode changed to {{ option }}"
+
+
+  - number:
+      - name: "Recover Free Cooling Max Fan Speed"
+        icon: mdi:fan-speed-3
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        # Restores the last value or defaults to 80% on startup
+        state: "{{ states('number.recover_free_cooling_max_fan_speed') | int(80) }}"
+        set_value:
+          - action: system_log.write
+            data:
+              message: "Freecooling max fan speed adjusted to {{ value }}%"
+      - name: "Genvex fan speed"
+        unique_id: genvex_fan_speed
+        icon: mdi:fan
+        state: "{{ (states('sensor.genvex_level_2_supply_pct') | float(0) + states('sensor.genvex_level_2_extract_pct') | float(0)) / 2 }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - variables:
+                current_balance: "{{ (states('sensor.genvex_level_2_supply_pct') | float(50) - states('sensor.genvex_level_2_extract_pct') | float(50)) / 2 }}"
+            - action: number.set_value
+              target:
+                entity_id: number.genvex_level_2_supply
+              data:
+                value: "{{ (value + current_balance) | clamp(0, 100) | int }}"
+            - action: number.set_value
+              target:
+                entity_id: number.genvex_level_2_extract
+              data:
+                value: "{{ (value - current_balance) | clamp(0, 100) | int }}"
+
+      - name: "Genvex fan balance"
+        unique_id: genvex_fan_balance
+        icon: mdi:scale-balance
+        state: "{{ (50 + (states('sensor.genvex_level_2_supply_pct') | float(50) - states('sensor.genvex_level_2_extract_pct') | float(50)) / 2) | int }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - variables:
+                current_speed: "{{ (states('sensor.genvex_level_2_supply_pct') | float(0) + states('sensor.genvex_level_2_extract_pct') | float(0)) / 2 }}"
+            - action: number.set_value
+              target:
+                entity_id: number.genvex_level_2_supply
+              data:
+                value: "{{ (current_speed + (value - 50)) | clamp(0, 100) | int }}"
+            - action: number.set_value
+              target:
+                entity_id: number.genvex_level_2_extract
+              data:
+                value: "{{ (current_speed - (value - 50)) | clamp(0, 100) | int }}"
+
+      - name: "Genvex Target Temperature"
+        unique_id: genvex_target_temperature
+        state: "{{ states('sensor.genvex_setpoint_temp') | float(20.0) | round(1) }}"
+        min: 10.0
+        max: 30.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                slave: 1
+                address: 0
+                value: "{{ (((value | float(20.0) - 10.0) * 10) | round(0)) | int }}"
+            - delay: "00:00:02"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_setpoint_temp
+
+      - name: "Genvex Filter Change Interval"
+        unique_id: genvex_num_filter_months
+        state: "{{ states('sensor.genvex_filter_change_months') | int(6) }}"
+        min: 1
+        max: 6
+        step: 1
+        unit_of_measurement: "months"
+        set_value:
+          action: modbus.write_register
+          data:
+            hub: genvex
+            address: 4
+            value: "{{ value | int }}"
+
+      - name: "Genvex Level 1 Supply"
+        unique_id: genvex_num_level_1_supply
+        state: "{{ states('sensor.genvex_level_1_supply_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 6
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_1_supply_pct
+
+      - name: "Genvex Level 2 Supply"
+        unique_id: genvex_num_level_2_supply
+        state: "{{ states('sensor.genvex_level_2_supply_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 7
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_2_supply_pct
+
+      - name: "Genvex Level 3 Supply"
+        unique_id: genvex_num_level_3_supply
+        state: "{{ states('sensor.genvex_level_3_supply_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 8
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_3_supply_pct
+
+      - name: "Genvex Level 1 Extract"
+        unique_id: genvex_num_level_1_extract
+        state: "{{ states('sensor.genvex_level_1_extract_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 9
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_1_extract_pct
+
+      - name: "Genvex Level 2 Extract"
+        unique_id: genvex_num_level_2_extract
+        state: "{{ states('sensor.genvex_level_2_extract_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 10
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_2_extract_pct
+
+      - name: "Genvex Level 3 Extract"
+        unique_id: genvex_num_level_3_extract
+        state: "{{ states('sensor.genvex_level_3_extract_pct') | int(0) }}"
+        min: 0
+        max: 100
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 11
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_3_extract_pct
+
+      - name: "Genvex Boost Timer Duration"
+        unique_id: genvex_num_timer_hours
+        state: "{{ states('sensor.genvex_level_3_4_hour') | int(1) }}"
+        min: 1
+        max: 9
+        step: 1
+        unit_of_measurement: "h"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 13
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_level_3_4_hour
+
+  # --- FUNCTION: HUMIDITY CONTROL CONFIGURATION ---
+      - name: "Genvex Humidity Max Temperature"
+        unique_id: genvex_num_humidity_max_temp
+        state: "{{ states('sensor.genvex_humidity_max_temp') | float(5.0) }}"
+        min: 5.0
+        max: 25.0
+        step: 0.5
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 28
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_humidity_max_temp
+
+      - name: "Genvex Humidity Max Value"
+        unique_id: genvex_num_humidity_max_val
+        state: "{{ states('sensor.genvex_humidity_max_value') | int(35) }}"
+        min: 35
+        max: 85
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 29
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_humidity_max_value
+
+      - name: "Genvex Humidity Fan Speed Boost"
+        unique_id: genvex_num_humidity_fan_speed
+        state: "{{ states('sensor.genvex_humidity_fan_speed') | int(5) }}"
+        min: 5
+        max: 30
+        step: 1
+        unit_of_measurement: "%"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 30
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_humidity_fan_speed
+
+      - name: "Genvex Humidity Regulation Time"
+        unique_id: genvex_num_humidity_regulation
+        state: "{{ states('sensor.genvex_humidity_regulation') | int(1) }}"
+        min: 1
+        max: 60
+        step: 1
+        unit_of_measurement: "min"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 31
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_humidity_regulation
+
+  # --- FUNCTION: SYSTEM PROTECTION & VALVES ---
+      - name: "Genvex Preheat Target Temperature"
+        unique_id: genvex_num_preheat_temp
+        state: "{{ states('sensor.genvex_preheat_temp_cfg') | float(0.0) | round(1) }}"
+        min: -15.0
+        max: 0.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                slave: 1
+                address: 16
+                value: "{{ (((value | float(0.0) + 15.0) * 10) | round(0)) | int }}" # KORREKT: Sender rå værdi 0-150
+            - delay: "00:00:02"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_preheat_temp_cfg
+
+      - name: "Genvex Bypass Max Temperature"
+        unique_id: genvex_num_bypass_max_temp
+        state: "{{ states('sensor.genvex_bypass_max_cfg') | float(1.0) }}"
+        min: 1.0
+        max: 10.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 17
+                value: "{{ (value * 10) | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_bypass_max_cfg
+
+      - name: "Genvex Water Regulation Interval"
+        unique_id: genvex_num_water_reg_interval
+        state: "{{ states('sensor.genvex_water_reg_interval') | int(1) }}"
+        min: 1
+        max: 250
+        step: 1
+        unit_of_measurement: "sec"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 18
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_water_reg_interval
+
+      - name: "Genvex Power Regulation Interval"
+        unique_id: genvex_num_power_reg_interval
+        state: "{{ states('sensor.genvex_power_reg_interval') | int(1) }}"
+        min: 1
+        max: 30
+        step: 1
+        unit_of_measurement: "min"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 19
+                value: "{{ value | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_power_reg_interval
+
+      - name: "Genvex Frost Reduction Temperature"
+        unique_id: genvex_num_frost_reduction
+        state: "{{ states('sensor.genvex_frost_reduction_cfg') | float(0.0) }}"
+        min: 0.0
+        max: 10.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 20
+                value: "{{ (value * 10) | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_frost_reduction_cfg
+
+      - name: "Genvex Frost Default Temperature"
+        unique_id: genvex_num_frost_default
+        state: "{{ states('sensor.genvex_frost_default_cfg') | float(0.0) }}"
+        min: 0.0
+        max: 10.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 22
+                value: "{{ (value * 10) | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_frost_default_cfg
+
+      - name: "Genvex End Bypass Low Fresh Air Limit"
+        unique_id: genvex_num_end_bypass_fresh_air
+        state: "{{ states('sensor.genvex_end_bypass_low_fresh_air') | float(0.0) }}"
+        min: 0.0
+        max: 20.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 25
+                value: "{{ (value * 10) | int }}"
+
+
+      - name: "Genvex t2 adjustment"
+        unique_id: genvex_num_t2_adjustment
+        state: "{{ states('sensor.genvex_t2_adjustment') | float(0.0) }}"
+        min: -5.0
+        max: 0.0
+        step: 0.1
+        unit_of_measurement: "°C"
+        set_value:
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: genvex
+                address: 12
+                value: "{{ (value * 10) | int }}"
+            - action: homeassistant.update_entity
+              target:
+                entity_id: sensor.genvex_t2_adjustment
